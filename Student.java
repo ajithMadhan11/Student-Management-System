@@ -1,10 +1,9 @@
 import java.util.ArrayList;
-import java.util.InputMismatchException;
 import java.util.Iterator;
 import java.util.Scanner;
 
 public class Student {
-    static int lastRegisteredId = 101;
+
     int id;
     String name;
     int year;
@@ -12,182 +11,103 @@ public class Student {
     int fees;
     Scanner sc = new Scanner(System.in);
 
-    // Add student method
-    public void addStudent() {
-        System.out.println("Enter Student name");
-        this.name = sc.nextLine();
-        this.id = lastRegisteredId++;
-        System.out.println("Enter Graduation year");
-        this.year = sc.nextInt();
-        System.out.println("Student Added Successfully");
+    /**
+     * Student Constructor
+     * 
+     * @param name Name of the studnet
+     * @param id   ID of the studnet
+     * @param year Graduation year of the student
+     */
+    Student(String name, int id, int year) {
+        this.name = name;
+        this.id = id;
+        this.year = year;
     }
 
-    // Printing student details
-    public void getDetails() {
-        System.out.println(this.id + "           " + this.name + "             " + this.year);
-    };
-
-    // Printing Student details in different format
-    public void getDetails(String r) {
-
-        System.out.print(this.id);
-        System.out.print("              ");
-        System.out.print(this.name);
-        System.out.print("            ");
-        courseEnrolled();
-        System.out.print("                         ");
-        System.out.print(this.fees);
-        System.out.println();
-
+    // This method is used to edit studnets name
+    public void editName() {
+        System.out.println("Enter new Student name :");
+        this.name = (sc.nextLine());
+        System.out.println("Student name Changed sucessfully!");
     }
 
-    // Print Student full details
-    public void getFullDetails() {
-        System.out.println("-----------------------------------------");
-        System.out.println("|         Student Full Detail           |");
-        System.out.println("-----------------------------------------");
-        System.out.println("Name            | " + this.name);
-        System.out.println("Id              | " + this.id);
-        System.out.println("Graduation year | " + this.year);
-        System.out.println("Pending fees    | " + this.fees);
-        System.out.print("Couses enrolled | ");
-        courseEnrolled();
-        System.out.println();
-        System.out.println("----------------------------------------");
-
+    // This method is used to edit studnets graduation year
+    public void editYear() {
+        System.out.println("Enter new Graduation year :");
+        this.year = (Integer.parseInt(sc.nextLine()));
+        System.out.println("Student's graduation year Changed sucessfully!");
     }
 
-    // Add course to student
+    // This method is used to edit studnets enrolled courses
+    public void editCourses(int c_id) {
+        Iterator itr = courseList.iterator();
+        while (itr.hasNext()) {
+            int data = (Integer) itr.next();
+            if (data == c_id) {
+                itr.remove();
+                this.fees -= 4000;
+                System.out.println("Course unrolled sucessfully and 20% service charge has been deducted!");
+                return;
+            }
+        }
+        System.out.println("No course found in that ID");
+    }
+
+    // This method is used to enroll studnet in a course
+    /**
+     * 
+     * @param c_id course ID that to be enrolled
+     */
     public void enrollCourse(int c_id) {
-
-        // Checking if total enrolled courses is not more than 5
-        if (courseList.size() == 5) {
-            System.out.println("Can't enroll more than 5 courses");
+        // if the length of courselist is more than 5 no more courses can be enrolled.
+        if (courseList.size() >= 5) {
+            System.out.println("You can't enroll more than 5 courses");
             return;
         }
-        // Checking course duplication in Student
+
+        // This checks if the course is already enrolled
         for (int id : courseList) {
             if (id == c_id) {
                 System.out.println("Course already enrolled!");
                 return;
             }
         }
-        courseList.add(c_id);
+
+        // add() method adds the course to the list
+        this.courseList.add(c_id);
+        // Course fees is added to the fees
         this.fees += 5000;
-        System.out.println("Course enrolled sucessfully");
+        System.out.println("Course Enrolled Sucessfully!");
+
     }
 
-    public void unEnrollCourse(int c_id) {
-        boolean check = false;
-        for (int id : courseList) {
-            if (id == c_id) {
-                check = true;
-                break;
-            }
-        }
-        if (check) {
-            Iterator itr = courseList.iterator();
-            while (itr.hasNext()) {
-                int data = (Integer) itr.next();
-                if (data == c_id) {
-                    itr.remove();
-                    break;
-                }
-            }
-            this.fees = this.fees - 4000;
-            System.out.println("Course Removed sucessfully 20% service charge has been deducted!");
+    // This method is used to pay Studnets fees
+    public void payFees() {
+        boolean exit = false;
 
-        } else {
-            System.out.println("No Course found in that ID!");
+        // this shows users pending fees.
+        System.out.println("Your pending fees is ₹" + this.fees);
 
-        }
-    }
-
-    // Fees paying method
-    public boolean checkFees() {
+        // if no pending fees returns a message
         if (this.fees == 0) {
-            System.out.println("No pending fees available for this studnet!");
-            return false;
-        } else {
-            System.out.println("The pending fees is ₹" + this.fees);
-            return true;
-        }
-    }
-
-    public void payFees(int amt) {
-        if (amt > this.fees) {
-            System.out.println("Entered amount is greater than payable fees!");
+            System.out.println("You don't have any pending fees! Thank you !");
             return;
         }
-        this.fees -= amt;
-        System.out.println("Fees paid sucessfully");
-    }
-
-    public void courseEnrolled() {
-        for (int id : courseList) {
-            System.out.print(id + "|");
-        }
-
-    }
-
-    public void editDetails() {
-        System.out.println("What field do you want to edit?");
-        System.out.println("           1.Name");
-        System.out.println("           2.Year");
-        System.out.println("           3.Courses enrolled");
-
-        int choice;
-        try {
-            choice = sc.nextInt();
-            switch (choice) {
-                case 1:
-                    editUserDetail("name");
-                    break;
-                case 2:
-                    editUserDetail("year");
-                    break;
-                case 3:
-                    editUserDetail("courseList");
-                    break;
-
-                default:
-                    break;
+        // loops till user exits
+        do {
+            // gets users fees amt
+            System.out.println("Enter amount to pay :");
+            int amt = (Integer.parseInt(sc.nextLine()));
+            // If entered amt is more than payable amount the return a message.
+            if (amt > this.fees) {
+                System.out.println("Entered amount is greater than your payable fees!");
+            } else {
+                // else reduces the amt from fees and exits.
+                this.fees -= amt;
+                System.out.println("Fees payed Sucessfully!");
+                exit = true;
             }
-        } catch (InputMismatchException a) {
-            System.out.println("Please enter a valid Input!");
-            sc.next();
-        }
-
-    }
-
-    public void editUserDetail(String type) {
-        if (type == "name") {
-            System.out.println("Please enter new name : ");
-            sc.nextLine();
-            String newName = sc.nextLine();
-            this.name = newName;
-            System.out.println("Student name edited sucessfully! ");
-            return;
-        } else if (type == "year") {
-            System.out.println("Please enter new year : ");
-            int newYear = sc.nextInt();
-            this.year = newYear;
-            System.out.println("Student's graduation year has been edited sucessfully! ");
-            return;
-        } else if (type == "courseList") {
-            if (courseList.size() == 0) {
-                System.out.print("No courses enrolled yet!");
-                return;
-            }
-            System.out.print("Enrolled courses : ");
-            courseEnrolled();
-            System.out.println();
-            System.out.print("Please enter the course ID to unenroll ");
-            int c_id = sc.nextInt();
-            unEnrollCourse(c_id);
-            return;
-
-        }
+        } while (!exit);
 
     }
 
