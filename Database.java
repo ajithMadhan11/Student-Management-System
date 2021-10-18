@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Scanner;
 
-public class Database {
+public class Database implements DatabaseServices {
 
     final private String userId = "Admin";
     final private String password = "Admin";
