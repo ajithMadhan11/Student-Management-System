@@ -11,7 +11,11 @@ public class Admin extends Database implements AdminServices {
      */
 
     public boolean authenticateUser(String userName, String password) {
-        return validateUser(userName, password);
+        if (validateUser(userName, password)) {
+            populateDatabase();
+            return true;
+        }
+        return false;
     }
 
     /**
