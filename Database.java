@@ -4,6 +4,9 @@ import java.util.Scanner;
 
 public class Database {
 
+    final private String userId = "Admin";
+    final private String password = "Admin";
+
     static int lastRegisteredId = 105;
     static ArrayList<Student> allStudents = new ArrayList<Student>();
     static ArrayList<Course> allCourses = new ArrayList<Course>();
@@ -22,6 +25,10 @@ public class Database {
         allCourses.add(new Course("Maths", 203, 5000));
         allCourses.add(new Course("Science", 204, 5000));
         allCourses.add(new Course("Social", 205, 5000));
+    }
+
+    public boolean validateUser(String username, String password) {
+        return (this.userId.equals(username) && this.password.equals(password));
     }
 
     // This method is used to display studnet detail in a table format

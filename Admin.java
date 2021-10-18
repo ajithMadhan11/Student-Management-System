@@ -11,12 +11,7 @@ public class Admin extends Database implements AdminServices {
      */
 
     public boolean authenticateUser(String userName, String password) {
-        if (userName.equals(AdminServices.userId) && password.equals(AdminServices.password)) {
-            populateDatabase();
-            return true;
-
-        } else
-            return false;
+        return validateUser(userName, password);
     }
 
     /**
